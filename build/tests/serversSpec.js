@@ -86,7 +86,7 @@ describe('Test of /api endpoints responses ', function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/imgs?filename=santamonica.jpg&width=1920&height=1273')];
+                case 0: return [4 /*yield*/, request.get('/api/imgs?filename=santamonica&width=1920&height=1252')];
                 case 1:
                     response = _a.sent();
                     expect(response.type).toBe('image/jpeg');

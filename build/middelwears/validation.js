@@ -39,54 +39,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
 function validate(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var filename, width, height, metadata_Cached, metadata_Imgs, error_1;
+        var filename, width, height;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 6, , 7]);
-                    filename = req.query.filename;
-                    width = parseInt(req.query.width);
-                    height = parseInt(req.query.height);
-                    if (!fs_1.default.existsSync(path_1.default.resolve("./cached/".concat(filename)))) return [3 /*break*/, 2];
-                    return [4 /*yield*/, (0, sharp_1.default)("cached/".concat(filename)).metadata()];
-                case 1:
-                    metadata_Cached = _a.sent();
-                    if (metadata_Cached.width == width && metadata_Cached.height == height) {
-                        res.sendFile(path_1.default.resolve("./cached/".concat(filename)));
+            try {
+                filename = req.query.filename;
+                width = parseInt(req.query.width);
+                height = parseInt(req.query.height);
+                //check cached folder
+                if (fs_1.default.existsSync(path_1.default.resolve("./imgs/".concat(filename, ".jpg")))) {
+                    if (fs_1.default.existsSync(path_1.default.resolve("./cached/".concat(filename).concat(width).concat(height, ".jpg")))) {
+                        res.sendFile(path_1.default.resolve("./cached/".concat(filename).concat(width).concat(height, ".jpg")));
                     }
                     else {
-                        //file exsist but needs resizing
                         next();
                     }
-                    return [3 /*break*/, 5];
-                case 2:
-                    if (!fs_1.default.existsSync(path_1.default.resolve("./imgs/".concat(filename)))) return [3 /*break*/, 4];
-                    return [4 /*yield*/, (0, sharp_1.default)("imgs/".concat(filename)).metadata()];
-                case 3:
-                    metadata_Imgs = _a.sent();
-                    if (metadata_Imgs.width == width && metadata_Imgs.height == height) {
-                        res.sendFile(path_1.default.resolve("./imgs/".concat(filename)));
-                    }
-                    else {
-                        //file exsist but needs resizing
-                        next();
-                    }
-                    return [3 /*break*/, 5];
-                case 4:
-                    res.send("Not a listed img,File doesn't exsist");
-                    _a.label = 5;
-                case 5: return [3 /*break*/, 7];
-                case 6:
-                    error_1 = _a.sent();
-                    console.log("An error occurred during processing: ".concat(error_1));
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                }
+                else {
+                    res.send("Image doesn't exsist in the database");
+                }
+                //image doesn't exsist
             }
+            catch (error) {
+                console.log("An error occurred during processing: ".concat(error));
+            }
+            return [2 /*return*/];
         });
     });
 }

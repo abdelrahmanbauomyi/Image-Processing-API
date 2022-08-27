@@ -12,14 +12,14 @@ async function resizeImg(
     const width: number = parseInt(req.query.width as unknown as string);
     const height: number = parseInt(req.query.height as unknown as string);
     // resizing using sharp
-    await sharp(path.resolve(`./imgs/${filename}`))
+    await sharp(path.resolve(`./imgs/${filename}.jpg`))
       .resize({
         width: width, //assign new width
         height: height, //assign new hight
       })
-      .toFile(path.resolve(`./cached/${filename}`)); //save to be cached
+      .toFile(path.resolve(`./cached/${filename}${width}${height}.jpg`)); //save to be cached
     console.log('Reszing done');
-    res.sendFile(path.resolve(`./cached/${filename}`)); //send the cached img
+    res.sendFile(path.resolve(`./cached/${filename}${width}${height}.jpg`)); //send the cached img
   } catch (err) {
     console.log(err);
   }

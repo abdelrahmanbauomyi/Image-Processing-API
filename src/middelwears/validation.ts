@@ -12,30 +12,19 @@ async function validate(
     const width: number = parseInt(req.query.width as unknown as string);
     const height: number = parseInt(req.query.height as unknown as string);
     //check cached folder
-    if (fs.existsSync(path.resolve(`./cached/${filename}`))) {
-      const metadata_Cached = await sharp(`cached/${filename}`).metadata();
-      if (metadata_Cached.width == width && metadata_Cached.height == height) {
-        res.sendFile(path.resolve(`./cached/${filename}`));
+    if (fs.existsSync(path.resolve(`./imgs/${filename}.jpg`))) {
+      if (
+        fs.existsSync(path.resolve(`./cached/${filename}${width}${height}.jpg`))
+      ) {
+        res.sendFile(path.resolve(`./cached/${filename}${width}${height}.jpg`));
       } else {
-        //file exsist but needs resizing
         next();
       }
-    }
-    //check imgs folder
-    else if (fs.existsSync(path.resolve(`./imgs/${filename}`))) {
-      const metadata_Imgs = await sharp(`imgs/${filename}`).metadata();
-      if (metadata_Imgs.width == width && metadata_Imgs.height == height) {
-        res.sendFile(path.resolve(`./imgs/${filename}`));
-      } else {
-        //file exsist but needs resizing
-        next();
-      }
+    } else {
+      res.send("Image doesn't exsist in the database");
     }
 
     //image doesn't exsist
-    else {
-      res.send("Not a listed img,File doesn't exsist");
-    }
   } catch (error) {
     console.log(`An error occurred during processing: ${error}`);
   }

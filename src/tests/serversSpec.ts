@@ -21,7 +21,7 @@ describe('Test of /api endpoints responses ', () => {
   });
   it(' gets the api/imgs endpoint with a query that work', async () => {
     const response = await request.get(
-      '/api/imgs?filename=santamonica.jpg&width=1920&height=1273'
+      '/api/imgs?filename=santamonica&width=1920&height=1252'
     );
     expect(response.type).toBe('image/jpeg');
   });
