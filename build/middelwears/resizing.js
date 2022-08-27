@@ -50,17 +50,19 @@ function resizeImg(req, res, next) {
                     _a.trys.push([0, 2, , 3]);
                     filename = req.query.filename;
                     width = parseInt(req.query.width);
-                    height = parseInt(req.query.hight);
+                    height = parseInt(req.query.height);
+                    // resizing using sharp
                     return [4 /*yield*/, (0, sharp_1.default)(path_1.default.resolve("./imgs/".concat(filename)))
                             .resize({
                             width: width,
-                            height: height
+                            height: height, //assign new hight
                         })
                             .toFile(path_1.default.resolve("./cached/".concat(filename)))];
                 case 1:
-                    _a.sent();
-                    console.log("done");
-                    res.sendFile(path_1.default.resolve("./cached/".concat(filename)));
+                    // resizing using sharp
+                    _a.sent(); //save to be cached
+                    console.log('Reszing done');
+                    res.sendFile(path_1.default.resolve("./cached/".concat(filename))); //send the cached img
                     return [3 /*break*/, 3];
                 case 2:
                     err_1 = _a.sent();

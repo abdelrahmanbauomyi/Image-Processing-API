@@ -50,8 +50,8 @@ function validate(req, res, next) {
                 case 0:
                     _a.trys.push([0, 6, , 7]);
                     filename = req.query.filename;
-                    width = req.query.width;
-                    height = req.query.hight;
+                    width = parseInt(req.query.width);
+                    height = parseInt(req.query.height);
                     if (!fs_1.default.existsSync(path_1.default.resolve("./cached/".concat(filename)))) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, sharp_1.default)("cached/".concat(filename)).metadata()];
                 case 1:
@@ -60,6 +60,7 @@ function validate(req, res, next) {
                         res.sendFile(path_1.default.resolve("./cached/".concat(filename)));
                     }
                     else {
+                        //file exsist but needs resizing
                         next();
                     }
                     return [3 /*break*/, 5];
@@ -71,12 +72,13 @@ function validate(req, res, next) {
                     if (metadata_Imgs.width == width && metadata_Imgs.height == height) {
                         res.sendFile(path_1.default.resolve("./imgs/".concat(filename)));
                     }
-                    else { //file exsist but needs resizing
+                    else {
+                        //file exsist but needs resizing
                         next();
                     }
                     return [3 /*break*/, 5];
                 case 4:
-                    res.send("Not a listed img");
+                    res.send("Not a listed img,File doesn't exsist");
                     _a.label = 5;
                 case 5: return [3 /*break*/, 7];
                 case 6:

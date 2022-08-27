@@ -11,3 +11,7 @@ app.listen(port, function () {
     console.log("listening on port :".concat(port));
 });
 app.use('/api', mainroute_1.default);
+app.get('/api', function (req, res) {
+    res.send('please use " locahost8000/api/imgs?filename=(name of the photo) & width =(desiered width) & height = (desiered height) " ');
+});
+exports.default = app;

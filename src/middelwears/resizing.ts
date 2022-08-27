@@ -1,27 +1,28 @@
-import { NextFunction ,Request,Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import sharp from 'sharp';
-import path from 'path'
-import fs from 'fs'
+import path from 'path';
 
-async function resizeImg(req:Request,res:Response,next:NextFunction) {
-    try{
-    const filename = req.query.filename;
-    let width :number  = parseInt(req.query.width as unknown as string) ;
-    let height :number = parseInt(req.query.hight as unknown as string) ;
-        
-
-        await sharp(path.resolve(`./imgs/${filename}`))
-        .resize({
-          width: width  ,
-          height: height 
-        })
-        .toFile(path.resolve(`./cached/${filename}`))
-        console.log("done");
-        res.sendFile(path.resolve(`./cached/${filename}`))
-      }  
-      catch(err){
-        console.log(err);
-      }
-    }
+async function resizeImg(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const filename: string = req.query.filename as string;
+    const width: number = parseInt(req.query.width as unknown as string);
+    const height: number = parseInt(req.query.height as unknown as string);
+    // resizing using sharp
+    await sharp(path.resolve(`./imgs/${filename}`))
+      .resize({
+        width: width, //assign new width
+        height: height, //assign new hight
+      })
+      .toFile(path.resolve(`./cached/${filename}`)); //save to be cached
+    console.log('Reszing done');
+    res.sendFile(path.resolve(`./cached/${filename}`)); //send the cached img
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export default resizeImg;
