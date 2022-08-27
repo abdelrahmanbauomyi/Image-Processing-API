@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 const request = supertest(app);
-fdescribe('Test of /api endpoints responses ', () => {
+fdescribe('Test of /api endpoints responses ', () => {//test suite for endpoints
   it('gets the api endpoint ', async () => {
     const response = await request.get('/api');
     expect(response.status).toBe(200);
@@ -31,7 +31,7 @@ fdescribe('Test of /api endpoints responses ', () => {
     expect(response.status).not.toBe(200);
   });
 });
-fdescribe('Test for image proccessing ', () => {
+fdescribe('Test for image proccessing ', () => { //test suite for image processing
   it('the  resize function creates creats an img', async () => {
     const filename = 'santamonica';
     const width = 1080;
@@ -49,7 +49,7 @@ fdescribe('Test for image proccessing ', () => {
 });
 
 afterAll(() => {
-  //to empty
+  //to empty cache
   fs.readdir(path.resolve(`./cached`), (err, files) => {
     if (err) throw err;
 
