@@ -43,8 +43,9 @@ var servers_1 = __importDefault(require("../servers"));
 var supertest_1 = __importDefault(require("supertest"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
+var sharp_1 = __importDefault(require("sharp"));
 var request = (0, supertest_1.default)(servers_1.default);
-describe('Test of /api endpoints responses ', function () {
+fdescribe('Test of /api endpoints responses ', function () {
     it('gets the api endpoint ', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
@@ -106,18 +107,41 @@ describe('Test of /api endpoints responses ', function () {
             }
         });
     }); });
-    afterAll(function () {
-        //to empty
-        fs_1.default.readdir(path_1.default.resolve("./cached"), function (err, files) {
-            if (err)
-                throw err;
-            for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
-                var file = files_1[_i];
-                fs_1.default.unlink(path_1.default.join(path_1.default.resolve("./cached"), file), function (err) {
-                    if (err)
-                        throw err;
-                });
+});
+fdescribe('Test for image proccessing ', function () {
+    it('the  resize function creates creats an img', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var filename, width, height;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    filename = 'santamonica';
+                    width = 1080;
+                    height = 720;
+                    return [4 /*yield*/, (0, sharp_1.default)(path_1.default.resolve("./imgs/".concat(filename, ".jpg")))
+                            .resize({
+                            width: width,
+                            height: height, //assign new hight
+                        })
+                            .toFile(path_1.default.resolve("./cached/".concat(filename).concat(width).concat(height, ".jpg")))];
+                case 1:
+                    _a.sent();
+                    expect(fs_1.default.existsSync(path_1.default.resolve("./cached/".concat(filename).concat(width).concat(height, ".jpg")))).toBeTrue();
+                    return [2 /*return*/];
             }
         });
+    }); });
+});
+afterAll(function () {
+    //to empty
+    fs_1.default.readdir(path_1.default.resolve("./cached"), function (err, files) {
+        if (err)
+            throw err;
+        for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
+            var file = files_1[_i];
+            fs_1.default.unlink(path_1.default.join(path_1.default.resolve("./cached"), file), function (err) {
+                if (err)
+                    throw err;
+            });
+        }
     });
 });

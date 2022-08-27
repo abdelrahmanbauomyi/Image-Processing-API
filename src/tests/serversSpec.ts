@@ -2,8 +2,9 @@ import app from '../servers';
 import supertest from 'supertest';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 const request = supertest(app);
-describe('Test of /api endpoints responses ', () => {
+fdescribe('Test of /api endpoints responses ', () => {
   it('gets the api endpoint ', async () => {
     const response = await request.get('/api');
     expect(response.status).toBe(200);
@@ -29,16 +30,33 @@ describe('Test of /api endpoints responses ', () => {
     const response = await request.get('/imgs');
     expect(response.status).not.toBe(200);
   });
-  afterAll(() => {
-    //to empty
-    fs.readdir(path.resolve(`./cached`), (err, files) => {
-      if (err) throw err;
+});
+fdescribe('Test for image proccessing ', () => {
+  it('the  resize function creates creats an img', async () => {
+    const filename = 'santamonica';
+    const width = 1080;
+    const height = 720;
+    await sharp(path.resolve(`./imgs/${filename}.jpg`))
+      .resize({
+        width: width, //assign new width
+        height: height, //assign new hight
+      })
+      .toFile(path.resolve(`./cached/${filename}${width}${height}.jpg`));
+    expect(
+      fs.existsSync(path.resolve(`./cached/${filename}${width}${height}.jpg`))
+    ).toBeTrue();
+  });
+});
 
-      for (const file of files) {
-        fs.unlink(path.join(path.resolve(`./cached`), file), (err) => {
-          if (err) throw err;
-        });
-      }
-    });
+afterAll(() => {
+  //to empty
+  fs.readdir(path.resolve(`./cached`), (err, files) => {
+    if (err) throw err;
+
+    for (const file of files) {
+      fs.unlink(path.join(path.resolve(`./cached`), file), (err) => {
+        if (err) throw err;
+      });
+    }
   });
 });

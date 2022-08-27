@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var mainroute_1 = __importDefault(require("./routes/mainroute"));
 var app = (0, express_1.default)();
-var port = 3000;
+var port = 5000;
 app.listen(port, function () {
     console.log("listening on port :".concat(port));
 });
